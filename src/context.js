@@ -15,7 +15,7 @@ export const GlobalContext = React.createContext({
 });
 
 export const GlobalContextProvider = (props) => {
-    const [city, setCity] = useState('manjeri');
+    const [city, setCity] = useState('mumbai');
     const [unit, setUnit] = useState(true);
     const [weather, setWeather] = useState({});
     const [forcast, setForcast] = useState([]);
