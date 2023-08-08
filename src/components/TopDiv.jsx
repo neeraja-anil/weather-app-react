@@ -1,10 +1,13 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { styled } from '@mui/system'
-import { Box, IconButton, InputBase, Typography } from '@mui/material'
+import { Box, Button, IconButton, InputBase, Typography } from '@mui/material'
 import FlexBetween from './FlexBetween'
-import { Search } from '@mui/icons-material'
+import { Search, TroubleshootOutlined } from '@mui/icons-material'
 import axios from 'axios'
 import { GlobalContext } from '../context'
+import { toast } from 'react-hot-toast'
+import moment from 'moment/moment'
+
 
 // Conditionally rendering bg Image 
 const Background = styled(Box)(({ background = '' }) => ({
@@ -24,66 +27,95 @@ const Background = styled(Box)(({ background = '' }) => ({
     borderRadius: '1rem',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
 
 }))
 
 
 
 const TopDiv = () => {
-    const [city, setCity] = useState('')
-    const { setWeatherData, weatherData } = useContext(GlobalContext)
+    const { setWeatherData, weatherData, setCity, city, isCelsius, setIsCelsius, loading, setLoading } = useContext(GlobalContext)
     const API = process.env.REACT_APP_API
     const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const isWeatherData = Object.keys(weatherData).length > 0;
 
+    const timeNow = moment().format("hh:mm A ")
+    const dateNow = (moment().format("DD MMMM yyyy dddd "))
+
+    const timeUtc = weatherData.dt
+    let time = (moment.unix(timeUtc).format("hh:mm A "))
+    const date = (moment.unix(timeUtc).format("DD MMMM yyyy dddd "))
+
+
+    const toggleTemperatureUnit = () => {
+        setIsCelsius(!isCelsius)
+    }
     // SEARCH Cities
     const handleSearch = async () => {
         try {
-            const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API}`)
-            console.log(data)
+            const unit = isCelsius ? 'metric' : 'imperial';
+            const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${unit}&appid=${API}`)
             setWeatherData(data)
         } catch (error) {
             console.log(error.message)
+            toast.error('You sure thats how you spell it?')
         }
 
     }
-    const isWeatherData = Object.keys(weatherData).length > 0;
-    // const timezone = weatherData?.timezone
-    // Current date and time
-    let d = new Date((new Date().getTime()))
-    d.toISOString()
-    console.log(weatherData);
+    // handle toggle
+    useEffect(() => {
+        handleSearch()
+    }, [isCelsius])
+
+
 
     return (
         <>
             <Background background={isWeatherData && weatherData?.weather[0]?.main}>
-                <Box display='flex' justifyContent='center'>
+                <Box display='flex' justifyContent='center' pt='1rem'>
+
                     {/* SEARCH CITIES */}
-                    <FlexBetween gap='3rem' borderRadius='2rem' border='1px solid white' padding='0.1rem 1.5rem'>
-                        <InputBase placeholder='Search cities...' onChange={(e) => setCity(e.target.value)} />
-                        <IconButton onClick={handleSearch}>
-                            <Search />
+                    <FlexBetween>
+                        <FlexBetween gap='3rem' borderRadius='2rem' border='1px solid white' padding='0.1rem 1.5rem'>
+                            <InputBase placeholder='Search cities...' onChange={(e) => setCity(e.target.value)} />
+                            <IconButton onClick={handleSearch} >
+                                <Search sx={{ color: 'black' }} />
+                            </IconButton>
+                        </FlexBetween>
+
+                        {/* TOGGLE TEMP UNITS */}
+                        <IconButton onClick={toggleTemperatureUnit} sx={{
+                            "&:hover": {
+                                backgroundColor: 'skyblue',
+                                cursor: 'pointer'
+                            }
+                        }}>
+                            <Typography color='blue'>{isCelsius ? '°F' : '°C'}</Typography>
                         </IconButton>
                     </FlexBetween>
                 </Box>
                 <Box >
-                    <FlexBetween gap='4rem' pb='2rem'>
+                    <FlexBetween gap='4rem' pb='2rem' px='1rem' sx={{ alignItems: 'end' }}>
                         <Box>
                             {isWeatherData &&
                                 <>
                                     {/* Weather Icon */}
                                     <img src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`} alt="" />
-                                    <Typography variant='h3' sx={{ color: 'black' }}>
-                                        {weatherData.main.temp} &#8451;
-                                    </Typography>
-                                    <Typography variant='h5' sx={{ color: 'black' }}>{weatherData.name}</Typography>
+                                    <FlexBetween>
+                                        <Typography variant='h3' sx={{ color: 'black' }}>
+                                            {weatherData.main.temp} {isCelsius ? '°C' : '°F'}
+                                        </Typography>
+                                    </FlexBetween>
+
+
+                                    <Typography variant='h5' sx={{ color: 'black' }}>{weatherData.name}, {weatherData.sys.country}</Typography>
                                 </>
                             }
 
                         </Box>
                         <Box>
-                            <Typography variant='h4' sx={{ color: 'black' }}>{`${d.getHours()}:${d.getMinutes()}`}</Typography>
-                            <Typography variant='h6' sx={{ color: 'black' }}>{`${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()} ${weekday[d.getDay()]}`}</Typography>
+                            <Typography variant='h4' sx={{ color: 'black' }}>{isWeatherData ? time : timeNow}</Typography>
+                            <Typography variant='h6' sx={{ color: 'black' }}>{isWeatherData ? date : dateNow}</Typography>
                         </Box>
                     </FlexBetween>
                 </Box>
