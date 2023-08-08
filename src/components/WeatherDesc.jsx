@@ -14,7 +14,7 @@ const Wrapper = styled(CardWrapper)(({ background = '' }) => ({
                     : background === 'Winter' ? `linear-gradient(to right, #E6DADA, #274046)`
                         : background === 'Clear' ? `linear-gradient(to right, #00d2ff, #3a7bd5)`
                             : background === 'Mist' ? `linear-gradient(to right, #B993D6, #8CA6DB)`
-                                : `linear-gradient(to right, #ffffff, #ffffff)`,
+                                : `linear-gradient(to right, #00d2ff, #3a7bd5)`,
 
 }))
 
