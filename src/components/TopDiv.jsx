@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { styled } from '@mui/system'
-import { Box, Button, IconButton, InputBase, Typography } from '@mui/material'
+import { Box, IconButton, InputBase, Typography } from '@mui/material'
 import FlexBetween from './FlexBetween'
-import { Search, TroubleshootOutlined } from '@mui/icons-material'
+import { Search } from '@mui/icons-material'
 import axios from 'axios'
 import { GlobalContext } from '../context'
 import { toast } from 'react-hot-toast'
@@ -34,11 +34,11 @@ const Background = styled(Box)(({ background = '' }) => ({
 
 
 const TopDiv = () => {
-    const { setWeatherData, weatherData, setCity, city, isCelsius, setIsCelsius, loading, setLoading } = useContext(GlobalContext)
+    const { setWeatherData, weatherData, setCity, city, isCelsius, setIsCelsius } = useContext(GlobalContext)
     const API = process.env.REACT_APP_API
-    const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const isWeatherData = Object.keys(weatherData).length > 0;
 
+    //TIME HANDLE
     const timeNow = moment().format("hh:mm A ")
     const dateNow = (moment().format("DD MMMM yyyy dddd "))
 
@@ -49,6 +49,7 @@ const TopDiv = () => {
 
     const toggleTemperatureUnit = () => {
         setIsCelsius(!isCelsius)
+        toast.success('Got it')
     }
     // SEARCH Cities
     const handleSearch = async () => {
@@ -56,9 +57,10 @@ const TopDiv = () => {
             const unit = isCelsius ? 'metric' : 'imperial';
             const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${unit}&appid=${API}`)
             setWeatherData(data)
+
         } catch (error) {
             console.log(error.message)
-            toast.error('You sure thats how you spell it?')
+            toast.error('City Not Found')
         }
 
     }
@@ -89,7 +91,8 @@ const TopDiv = () => {
                                 backgroundColor: 'skyblue',
                                 cursor: 'pointer'
                             }
-                        }}>
+                        }}
+                        >
                             <Typography color='blue'>{isCelsius ? '°F' : '°C'}</Typography>
                         </IconButton>
                     </FlexBetween>
@@ -103,7 +106,10 @@ const TopDiv = () => {
                                     <img src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`} alt="" />
                                     <FlexBetween>
                                         <Typography variant='h3' sx={{ color: 'black' }}>
-                                            {weatherData.main.temp} {isCelsius ? '°C' : '°F'}
+                                            {weatherData.main.temp}
+                                        </Typography>
+                                        <Typography variant='h3' sx={{ color: 'black' }}>
+                                            {isCelsius ? '°C' : '°F'}
                                         </Typography>
                                     </FlexBetween>
 
@@ -113,8 +119,8 @@ const TopDiv = () => {
                             }
 
                         </Box>
-                        <Box>
-                            <Typography variant='h4' sx={{ color: 'black' }}>{isWeatherData ? time : timeNow}</Typography>
+                        <Box >
+                            <Typography variant='h5' sx={{ color: 'black' }}>{isWeatherData ? time : timeNow}</Typography>
                             <Typography variant='h6' sx={{ color: 'black' }}>{isWeatherData ? date : dateNow}</Typography>
                         </Box>
                     </FlexBetween>

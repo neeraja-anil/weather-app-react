@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import moment from 'moment/moment';
 import CardWrapper from './Wrapper'
 import { Box, Typography } from '@mui/material';

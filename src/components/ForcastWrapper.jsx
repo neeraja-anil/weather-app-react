@@ -1,18 +1,15 @@
 import React, { useContext, useEffect } from 'react'
-import axios from 'axios';
-import { styled } from '@mui/system'
+import axios from 'axios'
 import Forcast from './Forcast'
-import CardWrapper from './Wrapper';
 import { GlobalContext } from '../context';
-import { Box, Grid, useMediaQuery } from '@mui/material';
+import { Grid } from '@mui/material';
 
 
 const ForcastWrapper = () => {
     const { setForcastData, city, forcastData, isCelsius } = useContext(GlobalContext)
-    const isNonMobileScreens = useMediaQuery('(min-width:768px)')
-
-
     const API = process.env.REACT_APP_API
+
+    // Fetching forcast data
     useEffect(() => {
         async function fetchData() {
             try {
@@ -46,7 +43,7 @@ const ForcastWrapper = () => {
             }
         }
         fetchData()
-    }, [city, isCelsius])
+    }, [city, isCelsius, setForcastData, API])
 
     return (
         <>

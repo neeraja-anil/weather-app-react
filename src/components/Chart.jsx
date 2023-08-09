@@ -67,7 +67,7 @@ const Chart = () => {
         })
         const windData = forcastData.map(item => item.wind)
         setWind(windData)
-    }, [forcastData])
+    }, [forcastData, wind])
 
 
     return (
