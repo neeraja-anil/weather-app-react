@@ -6,7 +6,7 @@ import { Box, Typography } from '@mui/material'
 import { AirOutlined, CompressOutlined, Thermostat, WaterDrop, WbSunnyOutlined } from '@mui/icons-material'
 
 const WeatherCard = () => {
-    const { weatherData } = useContext(GlobalContext)
+    const { weatherData, isCelsius } = useContext(GlobalContext)
     const isWeatherData = Object.keys(weatherData).length > 0;
     console.log(weatherData)
 
@@ -35,7 +35,7 @@ const WeatherCard = () => {
                     <WaterDrop sx={{ color: 'skyblue' }} />
                     <Box >
                         <Typography fontWeight={500}>Humidity</Typography>
-                        {isWeatherData && <Typography fontSize={12}>{weatherData.main.humidity} &#8451;</Typography>}
+                        {isWeatherData && <Typography fontSize={12}>{weatherData.main.humidity} {isCelsius ? '°C' : '°F'}</Typography>}
 
                     </Box>
                 </FlexBetween>
@@ -43,7 +43,7 @@ const WeatherCard = () => {
                     <WbSunnyOutlined sx={{ color: 'skyblue' }} />
                     <Box >
                         <Typography fontWeight={500}>Feels Like</Typography>
-                        {isWeatherData && <Typography fontSize={12}>{weatherData.main.feels_like} &#8451;</Typography>}
+                        {isWeatherData && <Typography fontSize={12}>{weatherData.main.feels_like} {isCelsius ? '°C' : '°F'} </Typography>}
 
                     </Box>
                 </FlexBetween>
@@ -53,14 +53,14 @@ const WeatherCard = () => {
                     <Thermostat sx={{ color: 'orange' }} />
                     <Box>
                         <Typography fontWeight={500}>Min Temp</Typography>
-                        {isWeatherData && <Typography fontSize={12}>{weatherData.main.temp_min} &#8451;</Typography>}
+                        {isWeatherData && <Typography fontSize={12}>{weatherData.main.temp_min} {isCelsius ? '°C' : '°F'} </Typography>}
                     </Box>
                 </FlexBetween>
                 <FlexBetween gap='1rem'>
                     <Thermostat sx={{ color: 'red' }} />
                     <Box>
                         <Typography fontWeight={500}>Max Temp</Typography>
-                        {isWeatherData && <Typography fontSize={12}>{weatherData.main.temp_max} &#8451;</Typography>}
+                        {isWeatherData && <Typography fontSize={12}>{weatherData.main.temp_max} {isCelsius ? '°C' : '°F'}</Typography>}
 
                     </Box>
                 </FlexBetween>
