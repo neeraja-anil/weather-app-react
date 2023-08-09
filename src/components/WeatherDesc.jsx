@@ -25,6 +25,9 @@ const WeatherDesc = () => {
 
     return (
         <Wrapper background={isWeatherData && weatherData?.weather[0].main}>
+            <Box display='flex' mt={0}>
+                {isWeatherData && <Typography color='white' fontWeight={400} fontSize={12}>Today in {weatherData.name}:</Typography>}
+            </Box>
             <Box display='flex' justifyContent='center'>
                 {isWeatherData && <Typography color='white' fontWeight={400} variant='h4'>{weatherData.weather[0].description}</Typography>}
             </Box>

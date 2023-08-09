@@ -32,6 +32,8 @@ const Chart = () => {
     const { forcastData } = useContext(GlobalContext)
 
     const options = {
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
             x: {
                 grid: {

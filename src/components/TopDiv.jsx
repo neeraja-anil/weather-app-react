@@ -49,7 +49,6 @@ const TopDiv = () => {
 
     const toggleTemperatureUnit = () => {
         setIsCelsius(!isCelsius)
-        toast.success('Got it')
     }
     // SEARCH Cities
     const handleSearch = async () => {
@@ -57,7 +56,7 @@ const TopDiv = () => {
             const unit = isCelsius ? 'metric' : 'imperial';
             const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${unit}&appid=${API}`)
             setWeatherData(data)
-
+            toast.success('Got it!')
         } catch (error) {
             console.log(error.message)
             toast.error('City Not Found')
