@@ -76,7 +76,7 @@ const TopDiv = () => {
                 <Box display='flex' justifyContent='center' pt='1rem'>
 
                     {/* SEARCH CITIES */}
-                    <FlexBetween>
+                    <FlexBetween gap='0.5rem'>
                         <FlexBetween gap='3rem' borderRadius='2rem' border='1px solid white' padding='0.1rem 1.5rem'>
                             <InputBase placeholder='Search cities...' onChange={(e) => setCity(e.target.value)} />
                             <IconButton onClick={handleSearch} >
@@ -87,12 +87,14 @@ const TopDiv = () => {
                         {/* TOGGLE TEMP UNITS */}
                         <IconButton onClick={toggleTemperatureUnit} sx={{
                             "&:hover": {
-                                backgroundColor: 'skyblue',
-                                cursor: 'pointer'
-                            }
+                                backgroundColor: '#E67E22 ',
+                                cursor: 'pointer',
+                            },
+                            border: '0.5px solid white',
+                            backgroundColor: '#F5B041 '
                         }}
                         >
-                            <Typography color='blue'>{isCelsius ? '°F' : '°C'}</Typography>
+                            <Typography color='white'>{isCelsius ? '°F' : '°C'}</Typography>
                         </IconButton>
                     </FlexBetween>
                 </Box>
